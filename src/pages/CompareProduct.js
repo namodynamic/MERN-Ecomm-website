@@ -98,7 +98,6 @@ const CompareProduct = () => {
           </div>
         </div>
       </Container>
-      1{" "}
     </>
   );
 };
