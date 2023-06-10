@@ -1,12 +1,12 @@
 import React from "react";
 import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Container from "../components/Container";
 import CustomInput from "../components/CustomInput";
 import { useFormik } from "formik";
-import { object, string, number } from "yup";
-import { useDispatch } from "react-redux";
+import { object, string } from "yup";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/user/userSlice";
 
 let loginSchema = object({
@@ -16,6 +16,8 @@ let loginSchema = object({
   password: string().required("Password is required"),
 });
 const Login = () => {
+  const authState = useSelector((state) => state.auth);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -25,6 +27,8 @@ const Login = () => {
     validationSchema: loginSchema,
     onSubmit: (values) => {
       dispatch(loginUser(values));
+
+      navigate("/");
     },
   });
   return (
