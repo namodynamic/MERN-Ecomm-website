@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
-import watch from "../images/watch.jpg";
 import Container from "../components/Container";
 import { useDispatch, useSelector } from "react-redux";
 import { object, string, number } from "yup";
 import { useFormik } from "formik";
 import { config } from "../utils/base_url";
 import axios from "axios";
+import { createAnOrder } from "../features/user/userSlice";
+import { base_url } from "../utils/base_url";
 
 const shippingSchema = object({
   firstName: string().required("Enter First Name"),
@@ -22,14 +23,27 @@ const shippingSchema = object({
 const Checkout = () => {
   const dispatch = useDispatch();
   const cartState = useSelector((state) => state.auth.userCart);
+
   const [totalAmount, setTotalAmount] = useState(null);
   const [shippingInfo, setShippingInfo] = useState(null);
+
+  const [userCartState, setUserCartState] = useState([]);
+
   useEffect(() => {
     let sum = 0;
+    let items = [];
     for (let index = 0; index < cartState?.length; index++) {
       sum = sum + Number(cartState[index].quantity) * cartState[index].price;
+
+      items.push({
+        product: cartState[index].productId._id,
+        quantity: cartState[index].quantity,
+        color: cartState[index].color._id,
+        price: cartState[index].price,
+      });
     }
     setTotalAmount(sum);
+    setUserCartState(items);
   }, [cartState]);
 
   const formik = useFormik({
@@ -46,139 +60,41 @@ const Checkout = () => {
     validationSchema: shippingSchema,
     onSubmit: (values) => {
       setShippingInfo(values);
+      handleOrderCreation();
     },
   });
 
-  // const loadScript = (src) => {
-  //   return new Promise((resolve) => {
-  //     const script = document.createElement("script");
-  //     script.src = src;
-  //     script.onload = () => {
-  //       resolve(true);
-  //     };
-  //     script.onerror = () => {
-  //       resolve(false);
-  //     };
-  //     document.body.appendChild(script);
-  //   });
-  // };
-  // const hanndleCheckout = async () => {
-  //   const res = await loadScript("https://checkout.flutterwave.com/v3.js");
+  const handleOrderCreation = async (e) => {
+    try {
+      const orderData = {
+        amount: totalAmount + 5,
+        shippingInfo: {
+          firstName: shippingInfo?.firstName,
+          lastName: shippingInfo?.lastName,
+          address: shippingInfo?.address,
+          city: shippingInfo?.city,
+          state: shippingInfo?.state,
+          country: shippingInfo?.country,
+          postcode: shippingInfo?.postcode,
+          other: shippingInfo?.other,
+        },
+        totalPrice: totalAmount,
+        totalPriceAfterDiscount: totalAmount,
+        orderItems: userCartState,
+      };
 
-  //   // Initialize payment form
-  //   var paymentForm = window.flutterwave({
-  //     public_key: process.env.FLW_PUBLIC_KEY,
-  //     tx_ref: "hooli-tx-1920bbtyt",
-  //     amount: 2000,
-  //     currency: "NGN",
-  //     payment_options: "card,mobilemoney,ussd",
-  //     redirect_url: "https://localhost:4000/api/user/order/checkout",
-  //     meta: {
-  //       consumer_id: 23,
-  //       consumer_mac: "92a3-912ba-1192a",
-  //     },
-  //     customer: {
-  //       email: "user@gmail.com",
-  //       phone_number: "+2348131089335",
-  //       name: "Yemi Desola",
-  //     },
-  //     callback: function (data) {
-  //       console.log(data);
-  //     },
-  //     onclose: function () {
-  //       console.log("Payment closed");
-  //     },
-  //     customizations: {
-  //       title: "My store",
-  //       description: "Payment for items in cart",
-  //       logo: "https://assets.piedpiper.com/logo.png",
-  //     },
-  //   });
+      const response = await axios.post(
+        `${base_url}user/cart/create-order`,
+        orderData,
+        config
+      );
+      console.log("Response:", response.data);
 
-  //   // Open payment form on button click
-  //   document.getElementById("payButton").addEventListener("click", function () {
-  //     paymentForm.open();
-  //   });
-  // };
-
-  //payment
-  // const loadScript = (src) => {
-  //   return new Promise((resolve) => {
-  //     const script = document.createElement("script");
-  //     script.src = src;
-  //     script.onload = () => {
-  //       resolve(true);
-  //     };
-  //     script.onerror = () => {
-  //       resolve(false);
-  //     };
-  //     document.body.appendChild(script);
-  //   });
-  // };
-
-  // const handleCheckout = async () => {
-  //   const res = await loadScript("https://checkout.flutterwave.com/v3.js");
-  //   if (!res) {
-  //     alert("Flutterwave SDK failed to load");
-  //     return;
-  //   }
-  //   try {
-  //     const response = await axios.post(
-  //       "https://localhost:4000/api/user/order/checkout",
-  //       "",
-  //       config
-  //     );
-  //     console.log("Response:", response.data);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-
-  //   const options = {
-  //     public_key: process.env.FLW_PUBLIC_KEY,
-  //     tx_ref: Date.now(),
-  //     amount: amount,
-  //     currency: currencey,
-  //     payment_options: "card, banktransfer, ussd",
-  //     redirect_url:
-  //       "https://localhost:4000/api/user/order/handle-flutterwave-payment",
-
-  //     order_id: order_id,
-  //     handler: async function (response) {
-  //       const data = {
-  //         orderCreationId: order_id,
-  //         flutterwavePayment: response.flutterwave_payment_id,
-  //         flutterwaveOrderId: response.flutterwave_order_id,
-  //       };
-  //       try {
-  //         const result = await axios.post(
-  //           "https://localhost:4000/api/user/order/paymentVerification",
-  //           data,
-  //           config
-  //         );
-  //         alert(result);
-  //       } catch (error) {
-  //         console.error("Payment verification failed", error);
-  //       }
-  //     },
-  //     meta: {
-  //       consumer_id: 23,
-  //       consumer_mac: "92a3-912ba-1192a",
-  //     },
-  //     customer: {
-  //       email: "test@example.com",
-  //       phone_number: "12345678",
-  //       name: "Namo Dynamic",
-  //     },
-  //     customizations: {
-  //       title: "My Store",
-  //       description: "Test Transaction",
-  //       logo: "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
-  //     },
-  //   };
-  //   const { amount, id: order_id, currencey } = result.data.order;
-  //   const paymentObject = new window.flutterwave(options);
-  //   paymentObject.open();
-  // };
+      dispatch(createAnOrder(orderData));
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <>
@@ -186,7 +102,7 @@ const Checkout = () => {
         <div className="row">
           <div className="col-7">
             <div className="checkout-left-data">
-              <h3 className="website-name">myShoplify</h3>
+              <h3 className="website-name">MyStore.</h3>
               <nav
                 style={{ "--bs-breadcrumb-divider": ">" }}
                 aria-label="breadcrumb"
@@ -351,11 +267,7 @@ const Checkout = () => {
                     <Link to="/cart" className="button">
                       Continue to Shipping
                     </Link>
-                    <button
-                      className="button"
-                      type="submit"
-                      // onClick={hanndleCheckout}
-                    >
+                    <button className="button" type="submit">
                       Place Order
                     </button>
                   </div>

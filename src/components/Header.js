@@ -47,12 +47,12 @@ const Header = () => {
       <header className="header-top-strip py-3">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-6">
+            <div className="col-md-6">
               <p className="text-white mb-0">
                 Free Shipping Over $100 & Free Returns
               </p>
             </div>
-            <div className="col-6">
+            <div className="col-md-6">
               <p className="text-end text-white mb-0">
                 Hotline:
                 <a className="text-white" href="tel:+234 7065262086">
@@ -66,12 +66,12 @@ const Header = () => {
       <header className="header-upper py-3">
         <div className="container-xxl">
           <div className="row align-items-center">
-            <div className="col-2">
+            <div className="col-md-2">
               <h2>
                 <Link className="text-white">MyStore.</Link>
               </h2>
             </div>
-            <div className="col-5">
+            <div className="col-md-5">
               <div className="input-group">
                 <Typeahead
                   id="pagination-example"
@@ -91,7 +91,7 @@ const Header = () => {
                 </span>
               </div>
             </div>
-            <div className="col-5">
+            <div className="col-md-5">
               <div className="header-upper-links d-flex align-items-center justify-content-between">
                 <div>
                   <Link
@@ -144,7 +144,7 @@ const Header = () => {
         <div className="container-xxl">
           <div className="row">
             <div className="col-12">
-              <div className="menu-bottom d-flex align-items-center gap-30">
+              <div className="menu-bottom d-flex flex-column flex-md-row align-items-center justify-content-between ">
                 <div>
                   <div className="dropdown">
                     <button
@@ -180,23 +180,26 @@ const Header = () => {
                       </li>
                     </ul>
                   </div>
+                  
                 </div>
-                <div className="menu-links">
-                  <div className="d-flex align-items-center gap-15">
+                <div className="menu-links mt-3 mt-md-0">
+                  <div className="d-flex align-items-center  gap-30">
                     <NavLink to="/">Home</NavLink>
                     <NavLink to="/product">Our Store</NavLink>
                     <NavLink to="/my-orders">My Orders</NavLink>
                     <NavLink to="/blogs">Blogs</NavLink>
                     <NavLink to="/contact">Contact</NavLink>
-                    <button
+                   
+                  </div>
+                 
+                </div>
+                <button
                       onClick={handleLogout}
-                      className="border border-0 bg-transparent text-white text-uppercase"
+                      className="border border-0 bg-transparent text-white text-uppercase mt-3 mt-md-0"
                       type="button"
                     >
                       Logout
                     </button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

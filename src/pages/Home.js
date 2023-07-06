@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Marquee from "react-fast-marquee";
 import BlogCard from "../components/BlogCard";
-import ProductCard from "../components/ProductCard";
 import SpecialProduct from "../components/SpecialProduct";
 import Container from "../components/Container";
 import { services } from "../utils/Data";
@@ -11,7 +10,6 @@ import moment from "moment";
 import { getAllProducts } from "../features/products/productSlice";
 import ReactStars from "react-rating-stars-component";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import prodcompare from "../images/prodcompare.svg";
 import wish from "../images/wish.svg";
 import watch2 from "../images/watch-1.jpg";
 import addcart from "../images/add-cart.svg";
@@ -41,7 +39,7 @@ const Home = () => {
     <>
       <Container class1="home-wrapper-1 py-5">
         <div className="row">
-          <div className="col-6">
+          <div className="col-md-6">
             <div className="main-banner position-relative ">
               <img
                 src="images/main-banner-1.jpg"
@@ -56,7 +54,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="col-6">
+          <div className="col-md-6">
             <div className="d-flex flex-wrap gap-10 justify-content-between align-items-center">
               <div className="small-banner position-relative ">
                 <img
@@ -120,7 +118,7 @@ const Home = () => {
       </Container>
       <Container class1="home-wrapper-2 py-5">
         <div className="row">
-          <div className="col-12">
+          <div className="col-md-12">
             <div className="services d-flex align-items-center justify-content-between">
               {services?.map((i, j) => {
                 return (
@@ -139,16 +137,16 @@ const Home = () => {
       </Container>
       <Container class1="home-wrapper-2 py-5">
         <div className="row">
-          <div className="col-12">
+          <div className="col-12 ">
             <div className="categories d-flex justify-content-between flex-wrap align-items-center">
-              <div className="d-flex gap align-items-center">
+              <div className="d-flex gap align-items-center justify-content-center">
                 <div>
                   <h6>Cameras & Videos</h6>
                   <p>10 Items</p>
                 </div>
                 <img src="images/camera.jpg" alt="camera" />
               </div>
-              <div className="d-flex gap align-items-center">
+              <div className="d-flex gap align-items-center justify-content-center">
                 <div>
                   <h6>Smart Television</h6>
                   <p>12 Items</p>
@@ -250,9 +248,6 @@ const Home = () => {
                       </div>
                       <div className="action-bar position-absolute">
                         <div className="d-flex flex-column gap-15">
-                          {/* <button className="border-0 bg-transparent">
-                            <img src={prodcompare} alt="compare" />
-                          </button> */}
                           <button className="border-0 bg-transparent">
                             <img
                               onClick={() => navigate("/product/" + item?._id)}
@@ -260,9 +255,6 @@ const Home = () => {
                               alt="view"
                             />
                           </button>
-                          {/* <button className="border-0 bg-transparent">
-                            <img src={addcart} alt="add cart" />
-                          </button> */}
                         </div>
                       </div>
                     </div>
@@ -274,7 +266,7 @@ const Home = () => {
       </Container>
       <Container class1="famous-wrapper py-5 home-wrapper-2">
         <div className="row">
-          <div className="col-3">
+          <div className="col-md-3">
             <div className="famous-card position-relative">
               <img
                 src="images/famous1.webp"
@@ -288,7 +280,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="col-3">
+          <div className="col-md-3">
             <div className="famous-card position-relative">
               <img
                 src="images/famous2.webp"
@@ -302,7 +294,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="col-3">
+          <div className="col-md-3">
             <div className="famous-card position-relative">
               <img
                 src="images/famous3.webp"
@@ -319,7 +311,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="col-3">
+          <div className="col-md-3">
             <div className="famous-card position-relative">
               <img
                 src="images/famous4.webp"
@@ -412,9 +404,6 @@ const Home = () => {
                       </div>
                       <div className="action-bar position-absolute">
                         <div className="d-flex flex-column gap-15">
-                          {/* <button className="border-0 bg-transparent">
-                            <img src={prodcompare} alt="compare" />
-                          </button> */}
                           <button className="border-0 bg-transparent">
                             <img
                               onClick={() => navigate("/product/" + item?._id)}
